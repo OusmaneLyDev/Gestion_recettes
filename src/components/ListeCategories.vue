@@ -23,17 +23,14 @@
       <td>{{ category.id }}</td>
       <td>{{ category.nom }}</td>
       <td class="text-end">
-        <!-- Bouton de visualisation avec l'icône d'œil -->
         <router-link :to="`/DetailsCategorie/${category.id}`" class="btn btn-info btn-sm me-2">
-          <i class="fas fa-eye"></i> <!-- Icône en forme d'œil pour "view" -->
+          <i class="fas fa-eye"></i> 
         </router-link>
 
-        <!-- Bouton pour éditer la catégorie -->
         <router-link :to="`/edit/${category.id}`" class="btn btn-warning btn-sm me-2">
           <i class="fas fa-edit"></i>
         </router-link>
 
-        <!-- Bouton pour supprimer la catégorie -->
         <button @click="confirmDelete(category.id)" class="btn btn-danger btn-sm">
           <i class="fas fa-trash"></i>
         </button>

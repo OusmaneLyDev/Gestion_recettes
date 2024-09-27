@@ -41,7 +41,7 @@
                 >
                   <i class="fas fa-eye"></i>
                 </button>
-                <router-link :to="`/edit/${recipe.id}`" class="btn btn-warning btn-sm me-2">
+                <router-link :to="`/edit-recette/${recipe.id}`" class="btn btn-warning btn-sm me-2">
                   <i class="fas fa-edit"></i>
                 </router-link>
                 <button @click="confirmDelete(recipe.id)" class="btn btn-danger btn-sm">
@@ -112,14 +112,14 @@ const ajouter = () => {
   router.push('/ajout')
 }
 
-const confirmDelete = (id) => {
+const confirmDelete = async (id) => {
   if (confirm('Êtes-vous sûr de vouloir supprimer cette recette ?')) {
-    deleteRecipe(id)
+    await deleteRecipe(id)
   }
 }
 
-const deleteRecipe = (id) => {
-  store.deleteRecette(id)
+const deleteRecipe = async (id) => {
+  await store.deleteRecette(id)
 }
 
 const openModal = (recipe) => {
@@ -133,7 +133,7 @@ const getCategoryName = (id) => {
 
 onMounted(async () => {
   await store.loadRecipesFromApi()
-  await storeC.loadCategoriesFromApi() // Charger les catégories
+  await storeC.loadCategoriesFromApi() 
 })
 </script>
 

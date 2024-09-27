@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
 
-// Store pour les recettes
 export const useRecipeStore = defineStore('recipe', () => {
   const recipes = ref([])
 
@@ -18,7 +17,7 @@ export const useRecipeStore = defineStore('recipe', () => {
   const ajoutRecette = async (recipe) => {
     try {
       const response = await axios.post('http://localhost:3000/recettes', recipe)
-      recipes.value.push(response.data) // Ajouter la recette retournée par l'API
+      recipes.value.push(response.data) 
     } catch (error) {
       console.error("Erreur lors de l'ajout de la recette :", error)
     }
@@ -36,7 +35,7 @@ export const useRecipeStore = defineStore('recipe', () => {
     }
   }
 
-  const deleteRecipe = async (id) => {
+  const deleteRecette = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/recettes/${id}`)
       const index = recipes.value.findIndex((r) => r.id === id)
@@ -48,7 +47,7 @@ export const useRecipeStore = defineStore('recipe', () => {
     }
   }
 
-  return { recipes, loadRecipesFromApi, ajoutRecette, updateRecipe, deleteRecipe }
+  return { recipes, loadRecipesFromApi, ajoutRecette, updateRecipe, deleteRecette }
 })
 
 // Store pour les catégories
@@ -59,7 +58,7 @@ export const useCategoryStore = defineStore('category', () => {
     { id: 3, nom: 'Desserts' }
   ])
 
-  let nextId = 4 // ID pour la prochaine catégorie à ajouter
+  let nextId = 4 
 
   const loadCategoriesFromApi = async () => {
     try {

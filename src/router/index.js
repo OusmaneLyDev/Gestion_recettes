@@ -37,7 +37,7 @@ const router = createRouter({
     },
     {
       path: '/edit/:id',
-      name: 'edit',
+      name: 'edit-recette',
       component: AjoutRecette,
       props: true
     },
