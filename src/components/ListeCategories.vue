@@ -7,38 +7,29 @@
     <div class="container">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-primary">{{ $t('categoryList') }}</h1>
-        <router-link to="/ajout-Categorie" class="btn btn-primary">{{ $t('addCategory') }}</router-link>
+        <router-link to="/ajout-Categorie" class="btn btn-primary">
+          {{ $t('addCategory') }}
+        </router-link>
       </div>
-      <div v-if="categories.length">
-        <table class="table table-striped table-bordered table-hover">
-  <thead class="table-dark">
-    <tr>
-      <th scope="col">{{ $t('id') }}</th>
-      <th scope="col">{{ $t('name') }}</th>
-      <th scope="col" class="text-end">{{ $t('actions') }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="category in categories" :key="category.id">
-      <td>{{ category.id }}</td>
-      <td>{{ category.nom }}</td>
-      <td class="text-end">
-        <router-link :to="`/DetailsCategorie/${category.id}`" class="btn btn-info btn-sm me-2">
-          <i class="fas fa-eye"></i> 
-        </router-link>
-
-        <router-link :to="`/edit/${category.id}`" class="btn btn-warning btn-sm me-2">
-          <i class="fas fa-edit"></i>
-        </router-link>
-
-        <button @click="confirmDelete(category.id)" class="btn btn-danger btn-sm">
-          <i class="fas fa-trash"></i>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
+      <div class="row" v-if="categories.length">
+        <div class="col-md-4 mb-4" v-for="category in categories" :key="category.id">
+          <div class="card shadow">
+            <div class="card-body">
+              <h5 class="card-title">{{ category.nom }}</h5>
+              <div class="d-flex justify-content-end">
+                <router-link
+                  :to="`/edit-categorie/${category.id}`"
+                  class="btn btn-warning btn-sm me-2"
+                >
+                  <i class="fas fa-edit"></i> Modifier
+                </router-link>
+                <button @click="confirmDelete(category.id)" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash"></i> Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div v-else>
         <p>{{ $t('noCategories') }}</p>
@@ -47,17 +38,27 @@
   </div>
 </template>
 
-
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useCategoryStore } from '../stores/gestion';
+import { onMounted, computed } from 'vue'
+import { useCategoryStore } from '../stores/gestion'
 
-const categoryStore = useCategoryStore();
-const categories = computed(() => categoryStore.getCategories());
+const storeC = useCategoryStore()
+const categories = computed(() => storeC.categories)
 
-onMounted(() => {
-  // Vous pouvez ajouter ici une méthode pour charger les catégories depuis une API si nécessaire.
-});
+const confirmDelete = async (id) => {
+  if (confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) {
+    await deleteCategory(id)
+    await storeC.loadCategoriesFromApi()
+  }
+}
+
+const deleteCategory = async (id) => {
+  await storeC.deleteCategory(id)
+}
+
+onMounted(async () => {
+  await storeC.loadCategoriesFromApi()
+})
 </script>
 
 <style scoped>
@@ -70,34 +71,11 @@ onMounted(() => {
   flex-direction: column;
 }
 
-.table {
-  border-radius: 10px;
-  overflow: hidden;
+.card {
+  border-radius: 10px; /* Coins arrondis */
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f9f9f9;
-}
-
-.table-bordered {
-  border: 2px solid #dee2e6;
-}
-
-.table-hover tbody tr:hover {
-  background-color: #e9ecef;
-}
-
-.table-dark {
-  background-color: #343a40;
-  color: #fff;
-}
-
-.table-dark th {
-  color: #fff;
-}
-
-.table-dark td,
-.table-dark th {
-  border-color: #454d55;
+.card-title {
+  font-size: 1.25rem; /* Taille de police pour le titre de la carte */
 }
 </style>
